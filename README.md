@@ -231,20 +231,18 @@ When adding new tests:
 - [Contract Testing Principles](https://pact.foundation/)
 - [REST API Best Practices](https://restfulapi.net/)
 
+---
+## 📄 License
+
+MIT
+
+**Built with** 🎭 **Playwright** | 📋 **JSON Schema** | ✅ **Contract-First Testing**
+
 ## 👨‍💻 Autor
 
 **Eng-paloma**
 - GitHub: [@Eng-paloma](https://github.com/Eng-paloma)
 
-## ⭐ Se este projeto foi útil, deixe uma estrela!
-
----
-
 **Última atualização:** 2026-05-06
-## 📄 License
 
-MIT
-
----
-
-**Built with** 🎭 **Playwright** | 📋 **JSON Schema** | ✅ **Contract-First Testing**
+## ⭐ Se este projeto foi útil, deixe uma estrela!
