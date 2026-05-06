@@ -1,0 +1,15 @@
+{
+  "name": "api-contract-quality-framework",
+  "version": "1.0.0",
+  "description": "Production-grade API contract testing framework for ReqRes using Playwright and JSON schema validation.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:api": "npx playwright test src/tests"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "ajv": "^8.14.0",
+    "ajv-formats": "^2.1.1"
+  }
+}
