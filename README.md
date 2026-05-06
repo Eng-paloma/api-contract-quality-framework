@@ -1,130 +1,240 @@
-# api-contract-quality-framework
+# API Contract Quality Framework
 
-## Project Overview
+A production-oriented API contract testing framework that validates REST endpoints using Playwright API testing and JSON Schema contracts. This framework demonstrates enterprise-grade quality engineering practices for API reliability and data validation.
 
-This repository contains a production-oriented API contract testing framework for the ReqRes backend. It validates REST behavior, HTTP status correctness, and response contracts with Playwright APIRequestContext and JSON schema validation.
+## 🎯 Project Purpose
 
-## Why ReqRes Is Used for Contract Testing
+This framework serves as the **first line of defense** for API reliability by:
+- Validating functional behavior and data contracts independently of UI automation
+- Catching integration failures and contract drift early
+- Reducing downstream risk in UI E2E test suites
+- Maintaining a clean separation of concerns between API validation and user journey testing
 
-ReqRes provides a stable API designed specifically for automated validation and backend-focused testing. It is an ideal target for demonstrating how API contract checks are executed before UI automation, ensuring reliable service integration.
+## 🏗️ Architecture
 
-## Architecture
+```
+api-contract-quality-framework/
+├── playwright.config.js           # Central API test configuration (headless execution)
+├── src/
+│   ├── api/
+│   │   ├── clients/              # Encapsulated API request clients
+│   │   ├── schemas/              # JSON Schema definitions for contract validation
+│   │   └── helpers/
+│   │       └── schemaValidator.js # Reusable validation logic
+│   └── tests/                     # Test suites (positive & negative scenarios)
+└── package.json
+```
 
-- `playwright.config.js`: centralizes request configuration, base URL, headers, retries, and timeouts.
-- `src/api/clients`: encapsulates API interactions for users and authentication.
-- `src/api/schemas`: reusable JSON schemas defining expected response structures.
-- `src/api/helpers/schemaValidator.js`: contract validator that keeps tests concise and consistent.
-- `src/tests`: intention-revealing coverage for positive and negative scenarios.
+### Key Components
 
-## Importance of API and Contract Testing in Quality Engineering
+| Component | Purpose |
+|-----------|---------|
+| **playwright.config.js** | Centralizes base URL, headers, retries, timeouts, and CI-friendly defaults |
+| **api/clients/** | Encapsulated HTTP request clients with meaningful methods |
+| **api/schemas/** | JSON Schema definitions for response contract validation |
+| **schemaValidator.js** | Reusable helper that keeps test assertions DRY and readable |
+| **tests/** | Intention-revealing tests organized by positive and negative coverage |
 
-API contract testing is a senior-quality engineering practice that catches integration failures early. Validating payload structure, required fields, and error behavior reduces risk in downstream UI and service-layer automation.
+## ✅ Test Coverage
 
-## Covered API Scenarios
+### Positive Scenarios
+- ✓ Fetch all resources and validate collection contract
+- ✓ Fetch single resource by ID and validate schema
+- ✓ Create new resource and validate response contract
+- ✓ Update resource and validate mutation contract
+- ✓ Verify HTTP 2xx success status codes
 
-- Positive: GET `/users` validates list envelope and user data contract
-- Positive: GET `/users/2` validates single user contract
-- Positive: POST `/users` validates user creation contract
-- Positive: POST `/login` validates successful login contract
-- Negative: GET `/users/23` validates 404 response behavior
-- Negative: POST `/login` without password validates 400 error behavior
-- Negative: POST `/login` without email validates 400 error behavior
+### Negative Scenarios
+- ✗ Invalid resource ID handling (HTTP 404)
+- ✗ Invalid/missing payload validation (HTTP 400)
+- ✗ Authentication/authorization failures (HTTP 401/403)
+- ✗ Contract violation detection and error response behavior
 
-## How to Run Tests
+## 🚀 Getting Started
 
-1. Install dependencies:
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
 npm install
 ```
 
-2. Export a ReqRes API key:
+### Environment Setup
+
+If using an API that requires authentication:
 
 ```bash
-export REQRES_API_KEY="your_reqres_api_key"
+export REQRES_API_KEY="your_api_key_here"
 ```
 
-3. Execute the test suite:
+### Running Tests
 
-```bash
-npm test
-```
-
-4. Run API tests only:
-
-```bash
-npm run test:api
-```
-
-## How This Project Complements UI E2E Testing
-
-This framework validates the service contracts that UI automation depends on. By catching API regressions and contract drift early, it keeps UI E2E suites focused on user flows rather than low-level data issues.
-
-## Professional Quality Expectations
-
-- Clean separation between clients, schema validation, and test assertions
-- Reusable contract validation helper instead of repeated logic
-- API-only execution with Playwright request fixtures
-- CI-friendly configuration with retries and deterministic assertions
-
-
-## Project Overview
-
-`api-contract-quality-framework` is a production-oriented API quality engineering project that validates FakeStore REST endpoints using Playwright API testing and JSON contract validation. The framework focuses on backend robustness, maintainability, and early defect detection before UI integration.
-
-## Purpose of API and Contract Testing
-
-This repository demonstrates how API tests and contract validation serve as the first line of defense for API reliability. It verifies both functional behavior and data contracts, ensuring changes are detected before they propagate into dependent services or UI layers.
-
-## Architecture
-
-- `playwright.config.js`: central API test configuration scoped for headless API execution.
-- `src/api/clients`: encapsulated request clients with meaningful methods for product and user operations.
-- `src/api/schemas`: JSON schemas for contract validation against API payloads.
-- `src/api/helpers`: reusable schema validation helper to keep assertions clean.
-- `src/tests`: intention-revealing API tests separated by positive and negative coverage.
-
-## Why Contract Testing Matters in Quality Engineering
-
-Contract testing protects the integration boundary between services. It verifies required fields, types, and nested object structures so API changes are caught immediately, reducing ambiguity and preventing regressions that are not detectable by status codes alone.
-
-## Covered API Scenarios
-
-- Positive: fetch all products and validate each item contract
-- Positive: fetch single product by ID and validate product schema
-- Positive: create a user and validate returned contract
-- Negative: invalid product ID handling and error response behavior
-- Negative: invalid user payload handling and error response behavior
-- Negative: missing required payload fields and contract-level validation
-
-## How to Run Tests Locally
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-2. Execute the API test suite:
-
+**Execute full test suite:**
 ```bash
 npm test
 ```
 
-3. Run only API specs:
-
+**Run API tests only:**
 ```bash
 npm run test:api
 ```
 
-## How This Project Complements UI E2E Automation
+**Run specific test file:**
+```bash
+npm test -- src/tests/users.spec.js
+```
 
-This framework is designed to validate API boundaries before UI tests execute. API contract validation identifies backend defects early, which reduces the scope and brittleness of subsequent UI E2E coverage. It complements UI automation by guaranteeing the service contracts, leaving UI tests to focus on presentation and end-user workflows.
+**Run with detailed output:**
+```bash
+npm test -- --verbose
+```
 
-## Quality Considerations
+## 🔍 Why Contract Testing Matters
 
-- Clear separation of responsibilities between clients, schemas, validation, and tests
-- Reusable contract validator to avoid duplicated assertion logic
-- Readable and intention-revealing tests aligned with senior QA standards
-- Headless API-only execution with Playwright request fixtures
-- Minimal implementation overhead while preserving enterprise-grade design
+Contract testing protects the integration boundary between services by:
+
+1. **Early Detection** - Catches API changes before they break downstream systems
+2. **Data Validation** - Verifies required fields, types, and nested object structures
+3. **Reduced Ambiguity** - Defines exact expectations for request/response payloads
+4. **Regression Prevention** - Prevents accidental breaking changes in API evolution
+5. **Independent Validation** - Works without relying on UI automation
+
+### Contract Testing vs. E2E Testing
+
+| Aspect | Contract Testing | E2E Testing |
+|--------|-----------------|-----------|
+| **Scope** | API boundaries | Complete user workflows |
+| **Speed** | Fast (headless) | Slower (browser rendering) |
+| **Maintenance** | Low fragility | Higher maintenance burden |
+| **Best Used For** | Data validation & integration | User experience validation |
+
+## 💡 Quality Engineering Principles
+
+This framework demonstrates:
+
+- ✓ **Separation of Concerns** - Clean boundaries between clients, schemas, validation, and tests
+- ✓ **DRY Code** - Reusable contract validation prevents duplicated logic
+- ✓ **Intention-Revealing Code** - Test names and structure make test purpose obvious
+- ✓ **Headless Execution** - API-only testing without browser overhead
+- ✓ **CI/CD Ready** - Deterministic assertions with retries and timeouts
+- ✓ **Enterprise Design** - Professional structure with minimal implementation overhead
+
+## 🔧 Configuration
+
+### Playwright Config
+
+The `playwright.config.js` provides:
+- Centralized base URL configuration
+- Global headers and authentication setup
+- Retry logic for transient failures
+- Timeout defaults optimized for API testing
+- Reporter configuration for CI/CD integration
+
+### Schema Validation
+
+JSON schemas define:
+- Required fields
+- Field types and formats
+- Nested object structures
+- Constraint rules (min/max, regex patterns, etc.)
+
+## 📊 Test Example
+
+```javascript
+import { test, expect } from '@playwright/test';
+import { UserClient } from '../api/clients/userClient';
+import { userSchema } from '../api/schemas/userSchema';
+import { validateContract } from '../api/helpers/schemaValidator';
+
+test('should fetch user and validate contract', async ({ request }) => {
+  const client = new UserClient(request);
+  
+  const response = await client.getUser(2);
+  expect(response.status()).toBe(200);
+  
+  const data = await response.json();
+  validateContract(data, userSchema);
+  expect(data.id).toBe(2);
+  expect(data.email).toContain('@');
+});
+```
+
+## 🛠️ How This Project Complements UI E2E Testing
+
+```
+Quality Testing Strategy:
+┌─────────────────────────────────────┐
+│  Contract Testing (This Framework)   │  ← Validates API boundaries
+│  - Fast, headless execution           │  ← Catches integration failures
+│  - Data contract validation           │  ← Early regression detection
+└─────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────┐
+│  UI E2E Testing                      │  ← Validates user workflows
+│  - Browser-based interaction         │  ← Tests UX reliability
+│  - End-to-end business flows         │  ← Reduces test fragility
+└─────────────────────────────────────┘
+```
+
+By validating APIs first, UI E2E suites can focus purely on user experience without debugging low-level data issues.
+
+## 📚 Best Practices
+
+### Writing Contract Tests
+
+1. **Name tests intentionally** - Describe what contract element is being validated
+2. **Separate setup from assertions** - Organize tests for readability
+3. **Validate structure AND values** - Check both schema compliance and business logic
+4. **Test error responses** - Negative scenarios are as important as positive ones
+5. **Use helper functions** - Leverage `schemaValidator.js` for consistency
+
+### Schema Design
+
+1. **Keep schemas focused** - One schema per resource type
+2. **Document field requirements** - Use schema descriptions for clarity
+3. **Validate constraints** - Include min/max, regex, enum values
+4. **Version schemas** - Plan for API evolution
+
+## 🚨 Troubleshooting
+
+**Tests timing out:**
+- Check network connectivity to API
+- Verify base URL in `playwright.config.js`
+- Increase timeout in configuration if needed
+
+**Schema validation failures:**
+- Review API response structure against schema
+- Verify required fields are present
+- Check field types match schema definition
+
+**Authentication errors:**
+- Confirm API key is set: `echo $REQRES_API_KEY`
+- Verify headers are configured in `playwright.config.js`
+
+## 📝 Contributing
+
+When adding new tests:
+
+1. Create a new test file in `src/tests/`
+2. Define or reuse a schema in `src/api/schemas/`
+3. Use the appropriate client from `src/api/clients/`
+4. Validate contracts using `schemaValidator.js`
+5. Include both positive and negative scenarios
+
+## 🎓 Learning Resources
+
+- [Playwright API Testing Docs](https://playwright.dev/docs/api-testing)
+- [JSON Schema Standard](https://json-schema.org/)
+- [Contract Testing Principles](https://pact.foundation/)
+- [REST API Best Practices](https://restfulapi.net/)
+
+## 📄 License
+
+MIT
+
+---
+
+**Built with** 🎭 **Playwright** | 📋 **JSON Schema** | ✅ **Contract-First Testing**
