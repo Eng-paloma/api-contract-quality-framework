@@ -240,9 +240,8 @@ MIT
 
 ## 👨‍💻 Autor
 
-**Eng-paloma**
 - GitHub: [@Eng-paloma](https://github.com/Eng-paloma)
 
-Criado em: Maio de 2026 | Autor: Eng-paloma
+Criado em: Maio de 2026
 
 
