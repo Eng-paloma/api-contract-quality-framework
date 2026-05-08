@@ -243,6 +243,6 @@ MIT
 **Eng-paloma**
 - GitHub: [@Eng-paloma](https://github.com/Eng-paloma)
 
-**Última atualização:** 2026-05-06
+Criado em: Maio de 2026 | Autor: Eng-paloma
 
-## ⭐ Se este projeto foi útil, deixe uma estrela!
+
